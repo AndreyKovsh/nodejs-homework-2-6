@@ -1,10 +1,16 @@
 const express = require('express')
 const router = express.Router()
-const userController = require('../../../controllers/users')
+const usersController = require('../../../controllers/users')
 const guard = require('../../../helpers/guard')
+const upload = require('../../../helpers/upload')
+const {validateUploadAvatar} =require('./validation')
+const {accountLimiter} =require('../../../helpers/rateLimit')
 
-router.post('/registration', userController.reg)
-router.post('/login', userController.login)
-router.post('/logout', guard, userController.logout)
+router.post('/register',accountLimiter,usersController.reg)
+router.post('/login',usersController.login)
+router.post('/logout', guard, usersController.logout)
+router.get('/current',guard, usersController.getCurrentUser)
+router.patch('/avatars', [guard , upload.single('avatar'),validateUploadAvatar] , usersController.avatars)
+router.get('/verify/:verifyToken', usersController.verify)
 
 module.exports = router

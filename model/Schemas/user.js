@@ -1,5 +1,6 @@
 const { Schema, model } = require('mongoose')
 const bcrypt = require('bcryptjs')
+const gravatar = require('gravatar');
 const { Subscription } = require('../../helpers/constants')
 const SALT_WORK_FACTOR = 8
 
@@ -31,9 +32,27 @@ const userSchema = new Schema(
             message:"Not allowed subscription",
         },
     },
+    avatar: {
+      type: String,
+       default: function () {
+        return gravatar.url(this.email, {s:'250'}, true)
+      } 
+    },
+    imgIdCloud: {
+      type: String,
+      default: null,
+    },
     token: {
       type: String,
       default: null,
+    },
+    verify: {
+      type: String,
+      default: false,
+    },
+    verifyToken: {
+      type: String,
+      required: [true, 'Verify token required'],
     },
   },
   { versionKey: false, timestamps: true },
