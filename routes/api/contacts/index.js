@@ -7,7 +7,7 @@ const validate=require('./validation')
 
 router
   .get('/', guard,  contactsController.getAllContats)
-  .post('/', guard,validate.createContact, contactsController.createContact)
+  .post('/', guard, contactsController.createContact)
 
 router
   .get("/:contactId", guard, contactsController.getContactByID)
